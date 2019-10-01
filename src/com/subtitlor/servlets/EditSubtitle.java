@@ -1,5 +1,7 @@
 package com.subtitlor.servlets;
 
+import com.subtitlor.utilities.SubtitlesHandler;
+
 import java.io.IOException;
 
 import javax.servlet.ServletContext;
@@ -9,7 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.subtitlor.utilities.SubtitlesHandler;
+
 
 @WebServlet("/EditSubtitle")
 public class EditSubtitle extends HttpServlet {
