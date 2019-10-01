@@ -17,6 +17,9 @@ public class EditSubtitle extends HttpServlet {
 	private static final String FILE_NAME = "/WEB-INF/password_presentation.srt";
     
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+
 		ServletContext context = getServletContext();
 		System.out.println(context.getRealPath(FILE_NAME));
 		SubtitlesHandler subtitles = new SubtitlesHandler(context.getRealPath(FILE_NAME));
@@ -27,7 +30,10 @@ public class EditSubtitle extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
+
+        this.getServletContext().getRequestDispatcher("/WEB-INF/edit_subtitle.jsp").forward(request, response);
 	}
 
 }
