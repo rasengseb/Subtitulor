@@ -1,0 +1,63 @@
+
+.chargement {
+    border-color: #14a2ff;
+    border-style: solid;
+    border-radius: 5px;
+    height: 300px;
+    margin-top : 25px;
+    margin: 20px;
+    display: inline-block;
+    text-align: center;
+}
+
+.reprise{
+    border-color: #14a2ff;
+    border-style: solid;
+    border-radius: 5px;
+    height: 300px;
+    margin-top : 25px;
+    margin-left: 20px;
+    display: inline-block;
+    text-align: center;
+}
+
+.save{
+    border-color: #14a2ff;
+    border-style: solid;
+    border-radius: 5px;
+    height: 300px;
+    margin-top : 25px;
+    margin-left: 20px;
+    display: inline-block;
+    text-align: center;
+}
+
+.charger{
+    font-size: 20px;
+    color : white;
+    background-color: #14a2ff;
+    display: inline-block;
+    text-align: center;
+}
+
+.reprendre{
+    font-size: 20px;
+    color: white;
+    background-color: #14a2ff;
+    display: inline-block;
+    text-align: center;
+}
+
+.sauver{
+    font-size: 20px;
+    color: #FFFFFF;
+    background-color : #14a2ff;
+    display: inline-block;
+    text-align: center;
+}
+
+.titre{
+    font-size: 30px;
+    background-color: #FFFFFF;
+}
+
