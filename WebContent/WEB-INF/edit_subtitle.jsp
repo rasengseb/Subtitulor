@@ -5,10 +5,33 @@
 <head>
 <meta charset="utf-8" />
 <title>Editer les sous-titres</title>
+<link href="bootstrap/dist/css/bootstrap.css" rel="stylesheet">
 </head>
 <body>
-    <form method="post">    
-        <input type="submit" style="position:fixed; top: 10px; right: 10px;" />
+	<div class="row">
+		<div class="col-lg-5">
+			<p class="charger">Charger un fichier</p>
+		</div>
+		<div class="col-lg-5">
+			<p class="reprendre">Reprendre un fichier</p>
+		</div>
+		<div class="col-lg-2">
+			<p class="sauver">Sauvegarder</p>
+		</div>
+	</div>
+
+
+
+
+
+
+
+
+
+
+    <form method="post">
+		<input type="text" value="Language Traduction"/>
+        <input type="submit" value="Enregistrer" />
 	    <table>
 	        <c:forEach items="${ subtitles }" var="line" varStatus="status">
 	        	<tr>

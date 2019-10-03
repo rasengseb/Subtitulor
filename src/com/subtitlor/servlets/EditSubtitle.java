@@ -16,8 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/EditSubtitle")
 public class EditSubtitle extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static final String FILE_NAME = "/WEB-INF/password_presentation.srt";
-    
+	private static final String FILE_NAME = "/WEB-INF/ressources/password_presentation.srt";
+
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
