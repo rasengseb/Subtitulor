@@ -1,59 +1,65 @@
 
 .chargement {
-    border-color: #14a2ff;
+    border-color: rgb(48,113,170);
     border-style: solid;
     border-radius: 5px;
+    border-width: 1px;
     height: 300px;
     margin-top : 25px;
-    margin: 20px;
     display: inline-block;
     text-align: center;
+    padding: 0px 0px 0px 0px;
 }
 
 .reprise{
-    border-color: #14a2ff;
+    border-color: rgb(48,113,170);
     border-style: solid;
     border-radius: 5px;
+    border-width: 1px;
     height: 300px;
     margin-top : 25px;
-    margin-left: 20px;
     display: inline-block;
     text-align: center;
+    padding: 0px 0px 0px 0px;
 }
 
 .save{
-    border-color: #14a2ff;
+    border-color: rgb(48,113,170);
     border-style: solid;
     border-radius: 5px;
+    border-width: 1px;
     height: 300px;
     margin-top : 25px;
-    margin-left: 20px;
     display: inline-block;
     text-align: center;
+    padding: 0px 0px 0px 0px;
 }
 
 .charger{
     font-size: 20px;
     color : white;
-    background-color: #14a2ff;
+    background-color: rgb(48,113,170);
     display: inline-block;
     text-align: center;
+    height: 40px;
 }
 
 .reprendre{
     font-size: 20px;
     color: white;
-    background-color: #14a2ff;
+    background-color: rgb(48,113,170);
     display: inline-block;
     text-align: center;
+    height: 40px;
 }
 
 .sauver{
     font-size: 20px;
-    color: #FFFFFF;
-    background-color : #14a2ff;
+    color: white;
+    background-color : rgb(48,113,170);
     display: inline-block;
     text-align: center;
+    height: 40px;
 }
 
 .titre{
@@ -61,3 +67,35 @@
     background-color: #FFFFFF;
 }
 
+.envoie{
+    margin-top : 5px
+}
+
+.btn{
+    background-color: rgb(48,113,170);
+}
+
+.supprimer{
+    background-color: rgb(238,161,53);
+    border-color : rgb(238,161,53);
+}
+
+.Enregistrer{
+    margin-bottom: 5px;
+}
+
+.boutons{
+    margin-top: 5px;
+}
+
+.files{
+    display: none;
+}
+
+.file{
+    margin-top: 5px;
+}
+
+select{
+    width: 90%;
+}
