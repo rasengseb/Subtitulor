@@ -99,3 +99,7 @@
 select{
     width: 90%;
 }
+
+td{
+    margin-left: 10px;
+}

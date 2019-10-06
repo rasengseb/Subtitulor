@@ -26,8 +26,9 @@ public class EditSubtitle extends HttpServlet {
 		System.out.println(context.getRealPath(FILE_NAME));
 		SubtitlesHandler subtitles = new SubtitlesHandler(context.getRealPath(FILE_NAME));
 		
-		request.setAttribute("subtitles", subtitles.getSubtitles());
-		
+		//request.setAttribute("subtitles", subtitles.getSubtitles());
+		request.setAttribute("subtitles", subtitles.getLignes());
+
 		this.getServletContext().getRequestDispatcher("/WEB-INF/edit_subtitle.jsp").forward(request, response);
 	}
 

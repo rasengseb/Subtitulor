@@ -4,21 +4,21 @@ import java.sql.Time;
 
 public class Traduction  {
 
-    private int id;
+    private String numeroTrad;
     private int id_fichier;
-    private Time temps_debut;
-    private Time temps_fin;
+    private String temps;
     private String ligne1_source;
     private String ligne2_source;
     private String ligne1_trad;
     private String ligne2_trad;
     private int id_langue_trad;
 
-    public Traduction(int id, int id_fichier, Time temps_debut, Time temps_fin, String ligne1_source, String ligne2_source, String ligne1_trad, String ligne2_trad, int id_langue_trad) {
-        this.id = id;
+    public Traduction(){
+
+    }
+    public Traduction(int id_fichier,String temps, String ligne1_source, String ligne2_source, String ligne1_trad, String ligne2_trad, int id_langue_trad) {
         this.id_fichier = id_fichier;
-        this.temps_debut = temps_debut;
-        this.temps_fin = temps_fin;
+        this.temps = temps;
         this.ligne1_source = ligne1_source;
         this.ligne2_source = ligne2_source;
         this.ligne1_trad = ligne1_trad;
@@ -26,12 +26,19 @@ public class Traduction  {
         this.id_langue_trad = id_langue_trad;
     }
 
-    public int getId() {
-        return id;
+    public void reset (){
+        numeroTrad = null;
+        temps = null;
+        ligne1_source = null;
+        ligne2_source = null;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public String getNumeroTrad() {
+        return numeroTrad;
+    }
+
+    public void setNumeroTrad(String numeroTrad) {
+        this.numeroTrad = numeroTrad;
     }
 
     public int getId_fichier() {
@@ -42,20 +49,12 @@ public class Traduction  {
         this.id_fichier = id_fichier;
     }
 
-    public Time getTemps_debut() {
-        return temps_debut;
+    public String getTemps() {
+        return temps;
     }
 
-    public void setTemps_debut(Time temps_debut) {
-        this.temps_debut = temps_debut;
-    }
-
-    public Time getTemps_fin() {
-        return temps_fin;
-    }
-
-    public void setTemps_fin(Time temps_fin) {
-        this.temps_fin = temps_fin;
+    public void setTemps(String temps) {
+        this.temps = temps;
     }
 
     public String getLigne1_source() {

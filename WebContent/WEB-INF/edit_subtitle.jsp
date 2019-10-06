@@ -81,19 +81,19 @@
     </div>
 </div>
 
-<div class="row">
-    <form method="post">
-        <input type="text" value="Language Traduction"/>
-        <input type="submit" value="Enregistrer"/>
-        <table>
-            <c:forEach items="${ subtitles }" var="line" varStatus="status">
-                <tr>
-                    <td style="text-align:right;"><c:out value="${ line }"/></td>
-                    <td><input type="text" name="line${ status.index }" id="line${ status.index }" size="35"/></td>
-                </tr>
-            </c:forEach>
-        </table>
-    </form>
-</div>
+<form method="post">
+    <table>
+        <c:forEach items="${ subtitles }" var="t" varStatus="status">
+            <tr>
+                <td style="text-align:right;"><c:out value="${ status.index }"/></td>
+                <td style="text-align:right;"><c:out value="${ t }"/></td>
+                <td style="text-align:right;"><c:out value="${ t }"/></td>
+                <td style="text-align:right;"><c:out value="${ t }"/></td>
+                <td><input style="margin-left: 10px" class="champTrad" type="text" name="line${ status.index }" id="line${ status.index }" size="35"/></td>
+                <td><input style="margin-left: 10px" type="text" class="champTrad" name="line${ status.index }" id="line${ status.index }" size="35"/></td>
+            </tr>
+        </c:forEach>
+    </table>
+</form>
 </body>
 </html>
