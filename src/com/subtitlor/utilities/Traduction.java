@@ -14,7 +14,7 @@ public class Traduction  {
     private int id_langue_trad;
 
     public Traduction(){
-
+        this.numeroTrad = null;
     }
     public Traduction(int id_fichier,String temps, String ligne1_source, String ligne2_source, String ligne1_trad, String ligne2_trad, int id_langue_trad) {
         this.id_fichier = id_fichier;

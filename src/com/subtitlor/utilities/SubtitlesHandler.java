@@ -13,15 +13,18 @@ public class SubtitlesHandler {
     public SubtitlesHandler(String fileName) {
         originalSubtitles = new ArrayList<String>();
         translatedSubtitles = new ArrayList<String>();
+        lignes = new ArrayList<Traduction>();
         BufferedReader br;
         try {
             br = new BufferedReader(new FileReader(fileName));
             String line;
             Traduction t = new Traduction();
             while ((line = br.readLine()) != null) {
-                if (Character.isDigit(line.charAt(0))) {
-                	lignes.add(t);
-                	t.reset();
+             /*if (Character.isDigit(line.charAt(0))) {
+                	if (t.getNumeroTrad() != null){
+                	    lignes.add(t);
+                        t.reset();
+                    }
 					t.setNumeroTrad(line);
                 } else {
                     if (Character.isDigit(line.charAt(0)) && (t.getNumeroTrad() != null)) { //Si le premier char de la ligne est un chiffre, alors c'est le temps
@@ -38,8 +41,8 @@ public class SubtitlesHandler {
                             }
                         }
                     }
-                }
-                //originalSubtitles.add(line);
+                }*/
+                originalSubtitles.add(line);
             }
             br.close();
         } catch (
