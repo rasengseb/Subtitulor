@@ -3,91 +3,108 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/css/styleSubtitlor.css" rel="stylesheet">
     <title>Editer les sous-titres</title>
-    <link href="bootstrap/dist/css/bootstrap.css" rel="stylesheet">
-    <link href="css/styleSubtitlor.css" rel="stylesheet">
 </head>
 <body>
+<div class="container-fluid">
+
+    <!-- Titre -->
+    <div class="col-lg-offset-4 col-lg-5">
+        <h1>Traduction des sous-titres de vidéos</h1>
+    </div>
 
 
-<div class="col-lg-offset-4 col-lg-5">
-    <p class="jumbotron titre">Traduction des sous-titres de vidéos</p>
-</div>
-
-
-<div class="row">
-
-    <!-- Ouvrir un fichier -->
-    <form method="post" id="chargement">
-        <div class="col-xs-4 chargement">
-            <p class="jumbotron col-xs-12 charger">Ouvrir un fichier</p>
-            <div class="row">
-                <div class="nom col-xs-6 nom_video">
-                    <label>Nom de la vidéo : </label>
-                    <div>
-                        <input type="text" name="name_video">
-                    </div>
+    <div class="row">
+        <!-- Ouvrir un fichier -->
+        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+            <div class="panel">
+                <div class="panel-heading text-center">
+                    <h2>Ouvrir un fichier</h2>
                 </div>
+                <div class="panel-body text-center">
+                    <form method="post" id="chargement">
+                        <div class="row">
+                            <div class="nom col-lg-6 nom_video">
+                                <label>Nom de la vidéo : </label>
+                                <div>
+                                    <input type="text" name="name_video">
+                                </div>
+                            </div>
 
-                <div class="language col-xs-6">
-                    <label>Langues :</label>
-                    <div>
-                        <select name="langues" id="langues" class="langues">
-                            <option value="fr">Français</option>
-                            <option value="en">English</option>
-                        </select>
-                    </div>
+                            <div class="language col-lg-6">
+                                <label>Langues :</label>
+                                <div>
+                                    <select name="langues" id="langues" class="langues">
+                                        <option value="fr">Français</option>
+                                        <option value="en">English</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 file">
+                                <div>
+                                    <label for="btn_fichier"> Choisir un fichier : </label> <input type="file "
+                                                                                                   name="fichier"
+                                                                                                   class="fichier"
+                                                                                                   id="btn_fichier"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="envoie">
+                            <input type="submit" value="Charger" class="btn btn-primary btn-sm" id="envoie_fichier">
+                        </div>
+                    </form>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-xs-12 file">
-                    <label> Choisir un fichier : </label>
-                    <div>
-                        <input type="file" name="fichier" class="fichier" style="display: none"/>
-                        <input type="text" readonly="readonly" id="file" onclick="parcourir();"/>
-                        <input type="button" value="Parcourir" onclick="parcourir();"/>
-                    </div>
+        </div>
+
+        <!-- Base de Données -->
+        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+            <div class="panel">
+                <div class="panel-heading text-center">
+                    <h2>Base de Données</h2>
+                </div>
+                <div class="panel-body text-center">
+                    <form method="post">
+                        <div class="Enregistrer">
+                            <input type="submit" class="btn btn-primary btn-sm" value="Enregistrer">
+                        </div>
+                        <label>Choissez une vidéo</label>
+                        <div>
+                            <select name="fichiers" id="fichiers" class="fichiers">
+                                <option value="">En cours</option>
+                            </select>
+                        </div>
+                        <div class="boutons">
+                            <input type="submit" value="Lire" class="btn btn-primary btn-sm">
+                            <input type="submit" value="Supprimer" class="btn btn-primary btn-sm supprimer">
+                        </div>
+                    </form>
                 </div>
             </div>
-            <div class="envoie">
-                <input type="submit" value="Charger" class="btn btn-primary btn-sm" id="envoie_fichier">
+        </div>
+
+
+        <!-- Sauver un fichier -->
+        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+            <div class="panel">
+                <div class="panel-heading text-center">
+                    <h2>Sauvegarder un fichier</h2>
+                </div>
+                <div class="panel-body text-center">
+                    <form method="post">
+                        <input type="submit" class="btn btn-primary btn-sm">
+                    </form>
+                </div>
             </div>
         </div>
-    </form>
-
-    <!-- Base de Données -->
-    <form method="post" id="enregistrer">
-        <div class="col-xs-4 reprise">
-            <form method="post" id="enregistrer">
-                <p class="jumbotron col-xs-12 reprendre">Base de données</p>
-                <div class="Enregistrer">
-                    <input type="submit" class="btn btn-primary btn-sm" value="Enregistrer">
-                </div>
-                <div>
-
-                    <label>Choissez une vidéo</label>
-                    <div>
-                        <select name="fichiers" id="fichiers" class="fichiers">
-                            <option value="">En cours</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="boutons">
-                    <input type="submit" value="Lire" class="btn btn-primary btn-sm">
-                    <input type="submit" value="Supprimer" class="btn btn-primary btn-sm supprimer">
-                </div>
-            </form>
-        </div>
-    </form>
-
-    <!-- Sauver un fichier -->
-    <form method="post" id="telecharger">
-        <div class="col-xs-4 save">
-            <p class="jumbotron col-xs-12 sauver">Sauvegarder un fichier</p>
-            <input type="submit" class="btn btn-primary btn-sm" id="Télécharger">
-        </div>
-    </form>
+    </div>
 </div>
 
 

@@ -1,105 +1,15 @@
-
-.chargement {
-    border-color: rgb(48,113,170);
-    border-style: solid;
-    border-radius: 5px;
-    border-width: 1px;
-    height: 300px;
-    margin-top : 25px;
-    display: inline-block;
-    text-align: center;
-    padding: 0px 0px 0px 0px;
+.panel {
+    border-color: rgb(49,117,176);
 }
 
-.reprise{
-    border-color: rgb(48,113,170);
-    border-style: solid;
-    border-radius: 5px;
-    border-width: 1px;
-    height: 300px;
-    margin-top : 25px;
-    display: inline-block;
-    text-align: center;
-    padding: 0px 0px 0px 0px;
+.panel-heading {
+    background-color: rgb(49,117,176);
 }
 
-.save{
-    border-color: rgb(48,113,170);
-    border-style: solid;
-    border-radius: 5px;
-    border-width: 1px;
-    height: 300px;
-    margin-top : 25px;
-    display: inline-block;
-    text-align: center;
-    padding: 0px 0px 0px 0px;
-}
-
-.charger{
-    font-size: 20px;
+.h2{
     color : white;
-    background-color: rgb(48,113,170);
-    display: inline-block;
-    text-align: center;
-    height: 40px;
-}
-
-.reprendre{
-    font-size: 20px;
-    color: white;
-    background-color: rgb(48,113,170);
-    display: inline-block;
-    text-align: center;
-    height: 40px;
-}
-
-.sauver{
-    font-size: 20px;
-    color: white;
-    background-color : rgb(48,113,170);
-    display: inline-block;
-    text-align: center;
-    height: 40px;
-}
-
-.titre{
-    font-size: 30px;
-    background-color: #FFFFFF;
-}
-
-.envoie{
-    margin-top : 5px
-}
-
-.btn{
-    background-color: rgb(48,113,170);
 }
 
 .supprimer{
-    background-color: rgb(238,161,53);
-    border-color : rgb(238,161,53);
-}
-
-.Enregistrer{
-    margin-bottom: 5px;
-}
-
-.boutons{
-    margin-top: 5px;
-}
-
-.files{
-    display: none;
-}
-
-.file{
-    margin-top: 5px;
-}
-
-select{
-    width: 90%;
-}
-
-td{
-    margin-left: 10px;
+    background-color: rgb(240,171,73);
 }
