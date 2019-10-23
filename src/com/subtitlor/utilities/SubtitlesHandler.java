@@ -19,34 +19,34 @@ public class SubtitlesHandler {
             br = new BufferedReader(new FileReader(fileName));
             String line;
             Traduction t = new Traduction();
+            int count = 0;
             while ((line = br.readLine()) != null) {
-             /*if (Character.isDigit(line.charAt(0))) {
-                	if (t.getNumeroTrad() != null){
-                	    lignes.add(t);
-                        t.reset();
-                    }
-					t.setNumeroTrad(line);
-                } else {
-                    if (Character.isDigit(line.charAt(0)) && (t.getNumeroTrad() != null)) { //Si le premier char de la ligne est un chiffre, alors c'est le temps
+                switch (count) {
+                    case (0): //numéro de la traduction
+                        t.setNumeroTrad(line);
+                        count++;
+                        break;
+                    case (1): //temps
                         t.setTemps(line);
-                    } else {
-                        if (t.getLigne1_source() == null) { //si l'on a pas de ligne de traduite
-                            t.setLigne1_source(line);
-                        } else {
-                            if (t.getLigne1_source() != null) { //si il y a déjà une première ligne
-                                t.setLigne2_source(line);
-                                lignes.add(t);
-                            } else {
-                                lignes.add(t);
-                            }
+                        count++;
+                        break;
+                    case (2): // ligne 1 à traduire
+                        count++;
+                        t.setLigne1_source(line);
+                        break;
+                    case (3): //ligne 2 à traduire
+                        if (line.length() != 0) {
+                            t.setLigne2_source(line);
                         }
-                    }
-                }*/
-                originalSubtitles.add(line);
+                        lignes.add(t);
+                        count = 0;
+                        t.reset();
+                        break;
+                }
+                // originalSubtitles.add(line);
             }
             br.close();
-        } catch (
-                IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -56,9 +56,9 @@ public class SubtitlesHandler {
         return originalSubtitles;
     }
 
-    public ArrayList<Traduction> getLignes(){
-    	return lignes;
-	}
+    public ArrayList<Traduction> getLignes() {
+        return lignes;
+    }
 
 
 }

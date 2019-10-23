@@ -1,9 +1,11 @@
 .panel {
     border-color: rgb(49,117,176);
+    margin-top: 10px;
 }
 
 .panel-heading {
     background-color: rgb(49,117,176);
+    color: white;
 }
 
 .h2{

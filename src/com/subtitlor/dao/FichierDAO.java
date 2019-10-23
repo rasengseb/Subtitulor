@@ -3,6 +3,10 @@ package com.subtitlor.dao;
 import com.subtitlor.utilities.Fichier;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class FichierDAO extends DAO<Fichier> {
     public FichierDAO(Connection conn) {
@@ -10,8 +14,15 @@ public class FichierDAO extends DAO<Fichier> {
     }
 
     @Override
-    public boolean create(Fichier obj) {
-        return false;
+    public void create(Fichier obj) {
+        PreparedStatement preparedStatement = null;
+        try {
+            preparedStatement = this.connect.prepareStatement("INSERT INTO fichier(nom) VALUES(?)");
+            preparedStatement.setString(1, obj.getNom());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -26,6 +37,33 @@ public class FichierDAO extends DAO<Fichier> {
 
     @Override
     public Fichier find(int id) {
-        return null;
+        Fichier fichier = new Fichier();
+        try {
+            ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM fichier WHERE id = " + id);
+            if (result.first()) {
+                fichier = new Fichier(id, result.getString("nom"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return fichier;
     }
+
+    @Override
+    public ArrayList<Fichier> findAll(int id) {
+        ArrayList<Fichier> fichiers = new ArrayList<Fichier>();
+        try{
+            ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM fichier WHERE id = " + id);
+            while(result.next()){
+                Fichier fichier = new Fichier();
+                fichier.setNom(result.getString("nom"));
+                fichier.setId(Integer.parseInt(result.getString("id")));
+                fichiers.add(fichier);
+            }
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+        return fichiers;
+    }
+
 }

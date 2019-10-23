@@ -3,6 +3,7 @@ package com.subtitlor.dao;
 import com.subtitlor.utilities.Traduction;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 
 public class TraductionDAO extends DAO<Traduction> {
     public TraductionDAO(Connection conn) {
@@ -10,8 +11,7 @@ public class TraductionDAO extends DAO<Traduction> {
     }
 
     @Override
-    public boolean create(Traduction obj) {
-        return false;
+    public void create(Traduction obj) {
     }
 
     @Override
@@ -26,6 +26,11 @@ public class TraductionDAO extends DAO<Traduction> {
 
     @Override
     public Traduction find(int id) {
+        return null;
+    }
+
+    @Override
+    public ArrayList<Traduction> findAll(int id) {
         return null;
     }
 }

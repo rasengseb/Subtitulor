@@ -32,14 +32,14 @@
                             <div class="nom col-lg-6 nom_video">
                                 <label>Nom de la vidéo : </label>
                                 <div>
-                                    <input type="text" name="name_video">
+                                    <input type="text" name="nom_video">
                                 </div>
                             </div>
 
                             <div class="language col-lg-6">
                                 <label>Langues :</label>
                                 <div>
-                                    <select name="langues" id="langues" class="langues">
+                                    <select name="langues" id="langues" name="langues">
                                         <option value="fr">Français</option>
                                         <option value="en">English</option>
                                     </select>
@@ -49,10 +49,7 @@
                         <div class="row">
                             <div class="col-lg-12 file">
                                 <div>
-                                    <label for="btn_fichier"> Choisir un fichier : </label> <input type="file "
-                                                                                                   name="fichier"
-                                                                                                   class="fichier"
-                                                                                                   id="btn_fichier"/>
+                                    <label for="btn_fichier"> Choisir un fichier : </label> <input type="file " name="fichier" class="fichier" id="btn_fichier"/>
                                 </div>
                             </div>
                         </div>
@@ -82,7 +79,7 @@
                             </select>
                         </div>
                         <div class="boutons">
-                            <input type="submit" value="Lire" class="btn btn-primary btn-sm">
+                            <input type="submit" value="Lire" name="lire" class="btn btn-primary btn-sm">
                             <input type="submit" value="Supprimer" class="btn btn-primary btn-sm supprimer">
                         </div>
                     </form>
@@ -108,14 +105,55 @@
 </div>
 
 
+<div class="container-fluid">
+    <!-- Bandeau récapitulatif -->
+    <div class="row">
+        <p>Vidéo : ${ fichier } Langue : ${ langue } Fichier : ${ file } </p>
+    </div>
+    <!-- tableau fichier à traduire -->
+    <form method="post">
+        <c:forEach items="${ subtitles }" var="t" varStatus="status">
+            <div class="row">
+                <div class="col-lg-1">
+                    <c:out value="${ status.index }">${ status.index }</c:out>
+                </div>
+
+                <div class="col-lg-3">
+                    <c:out value="${ t.getTemps() }">${ t.getTemps() }</c:out>
+                </div>
+
+                <div class="col-lg-4">
+                    <c:out value="${ t.getLigne1_source() }">${ t.getLigne1_source() }</c:out>
+                </div>
+
+                <div class="col-lg-4">
+                    <input class="champTrad" type="text" name="line${ status.index }" id="line${ status.index }">
+                </div>
+
+                <c:if test="${ t.getLigne2_source() != null }">
+                    <div class="row">
+                        <div class="col-lg-offset-4 col-lg-4">
+                            <c:out value="${ t.getLigne2_source() }">${ t.getLigne2_source() }</c:out>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <input class="champTrad" type="text" name="line${ status.index }" id="line${ status.index }">
+                        </div>
+                    </div>
+                </c:if>
+            </div>
+        </c:forEach>
+    </form>
+
+</div>
 <form method="post">
     <table>
-        <c:forEach items="${ subtitles }" var="t" varStatus="status">
+        <c:forEach items="${ subtitles }" var="line" varStatus="status">
             <tr>
                 <td style="text-align:right;"><c:out value="${ status.index }"/></td>
-                <td style="text-align:right;"><c:out value="${ t }"/></td>
-                <td style="text-align:right;"><c:out value="${ t }"/></td>
-                <td style="text-align:right;"><c:out value="${ t }"/></td>
+                <td style="text-align:right;"><c:out value="${ line }"/></td>
+                <td style="text-align:right;"><c:out value="${ line }"/></td>
+                <td style="text-align:right;"><c:out value="${ line }"/></td>
                 <td><input style="margin-left: 10px" class="champTrad" type="text" name="line${ status.index }"
                            id="line${ status.index }" size="35"/></td>
                 <td><input style="margin-left: 10px" type="text" class="champTrad" name="line${ status.index }"
