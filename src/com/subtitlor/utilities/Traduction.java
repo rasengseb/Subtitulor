@@ -1,24 +1,27 @@
 package com.subtitlor.utilities;
 
-import java.sql.Time;
 
-public class Traduction  {
+public class Traduction {
 
-    private String numeroTrad;
     private int id_fichier;
+    private int numeroTrad;
     private String temps;
     private String ligne1_source;
     private String ligne2_source;
+    private int id_langue_source;
     private String ligne1_trad;
     private String ligne2_trad;
     private int id_langue_trad;
 
-    public Traduction(){
-        this.numeroTrad = null;
+    public Traduction() {
+        this.numeroTrad = 0;
     }
-    public Traduction(int id_fichier,String temps, String ligne1_source, String ligne2_source, String ligne1_trad, String ligne2_trad, int id_langue_trad) {
+
+    public Traduction(int id_fichier, int numeroTrad, String temps, int id_langue_source, String ligne1_source, String ligne2_source, String ligne1_trad, String ligne2_trad, int id_langue_trad) {
         this.id_fichier = id_fichier;
+        this.numeroTrad = numeroTrad;
         this.temps = temps;
+        this.id_langue_source = id_langue_source;
         this.ligne1_source = ligne1_source;
         this.ligne2_source = ligne2_source;
         this.ligne1_trad = ligne1_trad;
@@ -26,18 +29,12 @@ public class Traduction  {
         this.id_langue_trad = id_langue_trad;
     }
 
-    public void reset (){
-        numeroTrad = null;
-        temps = null;
-        ligne1_source = null;
-        ligne2_source = null;
-    }
 
-    public String getNumeroTrad() {
+    public int getNumeroTrad() {
         return numeroTrad;
     }
 
-    public void setNumeroTrad(String numeroTrad) {
+    public void setNumeroTrad(int numeroTrad) {
         this.numeroTrad = numeroTrad;
     }
 
@@ -95,5 +92,28 @@ public class Traduction  {
 
     public void setId_langue_trad(int id_langue_trad) {
         this.id_langue_trad = id_langue_trad;
+    }
+
+    public int getId_langue_source() {
+        return id_langue_source;
+    }
+
+    public void setId_langue_source(int id_langue_source) {
+        this.id_langue_source = id_langue_source;
+    }
+
+    @Override
+    public String toString() {
+        return "Traduction{" +
+                "id_fichier=" + id_fichier +
+                ", numeroTrad='" + numeroTrad + '\'' +
+                ", temps='" + temps + '\'' +
+                ", ligne1_source='" + ligne1_source + '\'' +
+                ", ligne2_source='" + ligne2_source + '\'' +
+                ", id_langue_source=" + id_langue_source +
+                ", ligne1_trad='" + ligne1_trad + '\'' +
+                ", ligne2_trad='" + ligne2_trad + '\'' +
+                ", id_langue_trad=" + id_langue_trad +
+                '}';
     }
 }

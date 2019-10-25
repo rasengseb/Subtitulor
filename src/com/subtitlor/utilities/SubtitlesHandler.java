@@ -1,23 +1,24 @@
 package com.subtitlor.utilities;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 public class SubtitlesHandler {
-    private ArrayList<String> originalSubtitles = null;
-    private ArrayList<String> translatedSubtitles = null;
     private ArrayList<Traduction> lignes = null;
 
+    /**
+     * Créer des objets traduction et les ajoutes dans une ArrayList.
+     * @param fileName Chemin du fichier à lire.
+     */
     public SubtitlesHandler(String fileName) {
-        originalSubtitles = new ArrayList<String>();
-        translatedSubtitles = new ArrayList<String>();
+        Charset inputCharset = Charset.forName("UTF-8");
+        BufferedReader br = null;
         lignes = new ArrayList<Traduction>();
-        BufferedReader br;
         try {
-            br = new BufferedReader(new FileReader(fileName));
+            br = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), inputCharset));
             String line;
+            Boolean finDeFichier = false;
             Traduction t = new Traduction();
             int count = 0;
             while ((line = br.readLine()) != null) {
@@ -37,23 +38,29 @@ public class SubtitlesHandler {
                     case (3): //ligne 2 à traduire
                         if (line.length() != 0) {
                             t.setLigne2_source(line);
+                        } else {
+                            finDeFichier = true;
                         }
-                        lignes.add(t);
-                        count = 0;
-                        t.reset();
+                        break;
+                    case (4):
+                        finDeFichier = true;
                         break;
                 }
-                // originalSubtitles.add(line);
+                if (finDeFichier) {
+                    lignes.add(t);
+                    count = 0;
+                    t = new Traduction();
+                    finDeFichier = false;
+                }
+            }
+            for (Traduction trad : lignes) {
+                System.out.println(trad.toString());
             }
             br.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-    }
-
-    public ArrayList<String> getSubtitles() {
-        return originalSubtitles;
     }
 
     public ArrayList<Traduction> getLignes() {

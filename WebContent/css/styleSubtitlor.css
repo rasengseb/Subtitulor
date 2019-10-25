@@ -1,17 +1,23 @@
 .panel {
-    border-color: rgb(49,117,176);
+    border-color: rgb(49, 117, 176);
     margin-top: 10px;
 }
 
 .panel-heading {
-    background-color: rgb(49,117,176);
+    background-color: rgb(49, 117, 176);
     color: white;
 }
 
-.h2{
-    color : white;
+.h2 {
+    color: white;
 }
 
-.supprimer{
-    background-color: rgb(240,171,73);
+.supprimer {
+    background-color: rgb(240, 171, 73);
+}
+
+
+#btn_fichier {
+    margin-left: auto;
+    margin-right: auto;
 }

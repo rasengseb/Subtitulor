@@ -27,7 +27,8 @@
                     <h2>Ouvrir un fichier</h2>
                 </div>
                 <div class="panel-body text-center">
-                    <form method="post" id="chargement">
+                    <!--    <form method="post" action="${pageContext.request.contextPath}/edit" id="soustitreForm1" enctype="multipart/form-data" > Formulaire upload fichier --><!--accept=".srt"-->
+                    <form method="post" id="chargement" action="edit_subtitle.jsp">
                         <div class="row">
                             <div class="nom col-lg-6 nom_video">
                                 <label>Nom de la vidéo : </label>
@@ -47,9 +48,9 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-12 file">
+                            <div class="form-group">
                                 <div>
-                                    <label for="btn_fichier"> Choisir un fichier : </label> <input type="file " name="fichier" class="fichier" id="btn_fichier"/>
+                                    <label for="btn_fichier"> Choisir un fichier : </label> <input type="file" name="fichier" class="fichier" id="btn_fichier"/>
                                 </div>
                             </div>
                         </div>

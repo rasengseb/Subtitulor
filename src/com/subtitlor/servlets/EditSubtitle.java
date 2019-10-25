@@ -39,6 +39,7 @@ public class EditSubtitle extends HttpServlet {
 		setCharacterEncoding(request, response);
 
 		if(request.getParameter("fichier") != null){
+			System.out.println("***** LOG :  Appui sur le bouton fichier.");
 			String nom = request.getParameter("nom_video");
 			FILE_NAME = request.getParameter("btn_fichier");
 			String langue = request.getParameter("langues");
@@ -52,7 +53,7 @@ public class EditSubtitle extends HttpServlet {
 		}
 
 		if(request.getParameter("lire") != null){
-
+			System.out.println("***** LOG :  Appui sur le bouton lire.");
 		}
 		this.getServletContext().getRequestDispatcher(WEB_INF_EDIT_SUBTITLE_JSP).forward(request, response);
 	}
