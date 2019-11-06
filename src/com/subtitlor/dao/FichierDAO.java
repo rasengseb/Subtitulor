@@ -9,15 +9,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class FichierDAO extends DAO<Fichier> {
-    public FichierDAO(Connection conn) {
-        super(conn);
+    public FichierDAO() {
     }
 
     @Override
     public void create(Fichier obj) {
         PreparedStatement preparedStatement = null;
         try {
-            preparedStatement = this.connect.prepareStatement("INSERT INTO fichier(nom) VALUES(?)");
+            preparedStatement = this.daoFactory.getConnection().prepareStatement("INSERT INTO fichier(nom) VALUES(?)");
             preparedStatement.setString(1, obj.getNom());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -39,7 +38,7 @@ public class FichierDAO extends DAO<Fichier> {
     public Fichier find(int id) {
         Fichier fichier = new Fichier();
         try {
-            ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM fichier WHERE id = " + id);
+            ResultSet result = this.daoFactory.getConnection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM fichier WHERE id = " + id);
             if (result.first()) {
                 fichier = new Fichier(id, result.getString("nom"));
             }
@@ -53,7 +52,7 @@ public class FichierDAO extends DAO<Fichier> {
     public ArrayList<Fichier> findAll(int id) {
         ArrayList<Fichier> fichiers = new ArrayList<Fichier>();
         try{
-            ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM fichier WHERE id = " + id);
+            ResultSet result = this.daoFactory.getConnection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM fichier WHERE id = " + id);
             while(result.next()){
                 Fichier fichier = new Fichier();
                 fichier.setNom(result.getString("nom"));

@@ -9,15 +9,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class LanguageDAO extends DAO<Language> {
-    public LanguageDAO(Connection conn) {
-        super(conn);
+    public LanguageDAO() {
     }
 
     @Override
     public void create(Language obj) {
         PreparedStatement preparedStatement = null;
         try {
-            preparedStatement = this.connect.prepareStatement("INSERT INTO langues(langue) VALUES(?)");
+            preparedStatement = this.daoFactory.getConnection().prepareStatement("INSERT INTO langues(langue) VALUES(?)");
             preparedStatement.setString(1, obj.getLangue());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -39,7 +38,7 @@ public class LanguageDAO extends DAO<Language> {
     public Language find(int id) {
         Language language = new Language();
         try {
-            ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM fichier WHERE id = " + id);
+            ResultSet result = this.daoFactory.getConnection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM fichier WHERE id = " + id);
             if (result.first()) {
                 language = new Language(id, result.getString("langue"));
             }
@@ -53,7 +52,7 @@ public class LanguageDAO extends DAO<Language> {
     public ArrayList<Language> findAll(int id) {
         ArrayList<Language> languages = new ArrayList<Language>();
         try{
-            ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM fichier WHERE id = " + id);
+            ResultSet result = this.daoFactory.getConnection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM fichier WHERE id = " + id);
             while(result.next()){
                 Language language = new Language();
                 language.setLangue(result.getString("langue"));

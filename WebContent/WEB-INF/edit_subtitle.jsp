@@ -27,20 +27,21 @@
                     <h2>Ouvrir un fichier</h2>
                 </div>
                 <div class="panel-body text-center">
-                    <!--    <form method="post" action="${pageContext.request.contextPath}/edit" id="soustitreForm1" enctype="multipart/form-data" > Formulaire upload fichier --><!--accept=".srt"-->
-                    <form method="post" id="chargement" action="edit_subtitle.jsp">
+                    <form method="post" action="${pageContext.request.contextPath}/edit" id="soustitreForm1"
+                          enctype="multipart/form-data"> <!-- Formulaire upload fichier -->
+                        <!--accept=".srt"-->
                         <div class="row">
                             <div class="nom col-lg-6 nom_video">
                                 <label>Nom de la vidéo : </label>
                                 <div>
-                                    <input type="text" name="nom_video">
+                                    <input type="text" name="nom_video"/>
                                 </div>
                             </div>
 
                             <div class="language col-lg-6">
                                 <label>Langues :</label>
                                 <div>
-                                    <select name="langues" id="langues" name="langues">
+                                    <select id="langues" name="langues">
                                         <option value="fr">Français</option>
                                         <option value="en">English</option>
                                     </select>
@@ -50,26 +51,29 @@
                         <div class="row">
                             <div class="form-group">
                                 <div>
-                                    <label for="btn_fichier"> Choisir un fichier : </label> <input type="file" name="fichier" class="fichier" id="btn_fichier"/>
+                                    <label for="btn_fichier"> Choisir un fichier : </label> <input type="file"
+                                                                                                   name="fichier"
+                                                                                                   class="fichier"
+                                                                                                   id="btn_fichier"/>
                                 </div>
                             </div>
                         </div>
                         <div class="envoie">
-                            <input type="submit" value="Charger" class="btn btn-primary btn-sm" id="envoie_fichier">
+                            <input type="submit" value="Charger" name="charger" class="btn btn-primary btn-sm" id="envoie_fichier">
                         </div>
                     </form>
                 </div>
             </div>
         </div>
 
-        <!-- Base de Données -->
-        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-            <div class="panel">
-                <div class="panel-heading text-center">
-                    <h2>Base de Données</h2>
-                </div>
-                <div class="panel-body text-center">
-                    <form method="post">
+        <form method="post" action="${pageContext.request.contextPath}/edit">
+            <!-- Base de Données -->
+            <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                <div class="panel">
+                    <div class="panel-heading text-center">
+                        <h2>Base de Données</h2>
+                    </div>
+                    <div class="panel-body text-center">
                         <div class="Enregistrer">
                             <input type="submit" class="btn btn-primary btn-sm" value="Enregistrer">
                         </div>
@@ -83,36 +87,30 @@
                             <input type="submit" value="Lire" name="lire" class="btn btn-primary btn-sm">
                             <input type="submit" value="Supprimer" class="btn btn-primary btn-sm supprimer">
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
-        </div>
 
 
-        <!-- Sauver un fichier -->
-        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-            <div class="panel">
-                <div class="panel-heading text-center">
-                    <h2>Sauvegarder un fichier</h2>
-                </div>
-                <div class="panel-body text-center">
-                    <form method="post">
+            <!-- Sauver un fichier -->
+            <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                <div class="panel">
+                    <div class="panel-heading text-center">
+                        <h2>Sauvegarder un fichier</h2>
+                    </div>
+                    <div class="panel-body text-center">
                         <input type="submit" class="btn btn-primary btn-sm">
-                    </form>
+                    </div>
                 </div>
             </div>
-        </div>
     </div>
-</div>
 
-
-<div class="container-fluid">
     <!-- Bandeau récapitulatif -->
-    <div class="row">
-        <p>Vidéo : ${ fichier } Langue : ${ langue } Fichier : ${ file } </p>
-    </div>
-    <!-- tableau fichier à traduire -->
-    <form method="post">
+    <c:if test="${ fichierCharger }">
+        <div class="row">
+            <p>Vidéo : ${ fichier } Langue : ${ langue } Fichier : ${ file } </p>
+        </div>
+        <!-- tableau fichier à traduire -->
         <c:forEach items="${ subtitles }" var="t" varStatus="status">
             <div class="row">
                 <div class="col-lg-1">
@@ -123,45 +121,34 @@
                     <c:out value="${ t.getTemps() }">${ t.getTemps() }</c:out>
                 </div>
 
-                <div class="col-lg-4">
-                    <c:out value="${ t.getLigne1_source() }">${ t.getLigne1_source() }</c:out>
-                </div>
+                <div class="form-group">
+                    <div class="col-lg-4">
+                        <c:out value="${ t.getLigne1_source() }">${ t.getLigne1_source() }</c:out>
+                    </div>
 
-                <div class="col-lg-4">
-                    <input class="champTrad" type="text" name="line${ status.index }" id="line${ status.index }">
-                </div>
+                    <div class="col-lg-4">
+                        <input class="form-control" type="text" name="line${ status.index }" id="line${ status.index }">
+                    </div>
 
-                <c:if test="${ t.getLigne2_source() != null }">
+                    <c:if test="${ t.getLigne2_source() != null }">
                     <div class="row">
                         <div class="col-lg-offset-4 col-lg-4">
                             <c:out value="${ t.getLigne2_source() }">${ t.getLigne2_source() }</c:out>
                         </div>
 
                         <div class="col-lg-4">
-                            <input class="champTrad" type="text" name="line${ status.index }" id="line${ status.index }">
+                            <input class="form-control" type="text" name="line${ status.index }2"
+                                   id="line${ status.index }">
                         </div>
                     </div>
+                </div>
                 </c:if>
             </div>
         </c:forEach>
+    </c:if>
+
     </form>
 
 </div>
-<form method="post">
-    <table>
-        <c:forEach items="${ subtitles }" var="line" varStatus="status">
-            <tr>
-                <td style="text-align:right;"><c:out value="${ status.index }"/></td>
-                <td style="text-align:right;"><c:out value="${ line }"/></td>
-                <td style="text-align:right;"><c:out value="${ line }"/></td>
-                <td style="text-align:right;"><c:out value="${ line }"/></td>
-                <td><input style="margin-left: 10px" class="champTrad" type="text" name="line${ status.index }"
-                           id="line${ status.index }" size="35"/></td>
-                <td><input style="margin-left: 10px" type="text" class="champTrad" name="line${ status.index }"
-                           id="line${ status.index }" size="35"/></td>
-            </tr>
-        </c:forEach>
-    </table>
-</form>
 </body>
 </html>

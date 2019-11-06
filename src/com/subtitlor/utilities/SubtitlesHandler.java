@@ -24,7 +24,7 @@ public class SubtitlesHandler {
             while ((line = br.readLine()) != null) {
                 switch (count) {
                     case (0): //numéro de la traduction
-                        t.setNumeroTrad(line);
+                        t.setNumeroTrad(Integer.parseInt(line));
                         count++;
                         break;
                     case (1): //temps
