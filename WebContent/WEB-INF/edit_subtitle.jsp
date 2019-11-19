@@ -42,8 +42,9 @@
                                 <label>Langues :</label>
                                 <div>
                                     <select id="langues" name="langues">
-                                        <option value="fr">Français</option>
-                                        <option value="en">English</option>
+                                        <c:forEach items="${ langages }" var="langage" varStatus="status">
+                                            <option value="${ langage.getLangue() }"> ${ langage.getLangue() }</option>
+                                        </c:forEach>
                                     </select>
                                 </div>
                             </div>
@@ -58,8 +59,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="envoie">
-                            <input type="submit" value="Charger" name="charger" class="btn btn-primary btn-sm" id="envoie_fichier">
+                        <div>
+                            <input type="submit" value="Charger" name="charger" id="charger" class="btn btn-primary btn-sm">
                         </div>
                     </form>
                 </div>

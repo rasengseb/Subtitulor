@@ -1,5 +1,8 @@
 package com.subtitlor.servlets;
 
+import com.subtitlor.dao.LanguageDAO;
+import com.subtitlor.dao.TraductionDAO;
+import com.subtitlor.utilities.Language;
 import com.subtitlor.utilities.SubtitlesHandler;
 import com.subtitlor.utilities.Traduction;
 
@@ -18,33 +21,39 @@ import javax.servlet.http.Part;
 @WebServlet("/EditSubtitle")
 public class EditSubtitle extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private static String FILE_NAME = "/WEB-INF/ressources/password_presentation.srt";
+    private static String FILE_NAME = "/ressources/";
     private static final String WEB_INF_EDIT_SUBTITLE_JSP = "/WEB-INF/edit_subtitle.jsp";
     private boolean fichierCharger = false;
     private static final int TAILLE_TAMPON = 10240;
     public static final String CHEMIN_FICHIERS = "/ressources";
     private ArrayList<Traduction> sousTitres;
+    ArrayList<Language> langages;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         setCharacterEncoding(request, response);
         request.setAttribute("fichierCharger", fichierCharger);
 
-        ServletContext context = getServletContext();
-        System.out.println(context.getRealPath(FILE_NAME));
-        SubtitlesHandler subtitles = new SubtitlesHandler(context.getRealPath(FILE_NAME));
-
-        request.setAttribute("subtitles", subtitles.getLignes());
-
+       // ServletContext context = getServletContext();
+       // System.out.println(context.getRealPath(FILE_NAME));
+        //SubtitlesHandler subtitles = new SubtitlesHandler(context.getRealPath(FILE_NAME));
+        //request.setAttribute("subtitles", subtitles.getLignes());
+        LanguageDAO languagedao = new LanguageDAO();
+        langages = languagedao.getAll();
+        request.setAttribute("langages", langages);
 
         this.getServletContext().getRequestDispatcher(WEB_INF_EDIT_SUBTITLE_JSP).forward(request, response);
     }
 
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("entrer dans doPost");
         setCharacterEncoding(request, response);
-        request.setAttribute("fichierCharger", fichierCharger);
+        LanguageDAO languagedao = new LanguageDAO();
+        langages = languagedao.getAll();
+        request.setAttribute("langages", langages);
+        //request.setAttribute("fichierCharger", fichierCharger);
 
-        if (request.getParameter("envoie_fichier") != null) {
+        if (request.getParameter("charger") != null) {
             System.out.println("***** LOG :  Appui sur le bouton fichier.");
             fichierCharger = true;
             request.setAttribute("fichierCharger", fichierCharger);
@@ -63,6 +72,8 @@ public class EditSubtitle extends HttpServlet {
                 request.setAttribute(nomChamp, nomFichier);
             }
 
+            FILE_NAME = FILE_NAME + nomFichier;
+            System.out.println(FILE_NAME);
             String langue = request.getParameter("langues");
             request.setAttribute("fichier", nomFichier);
             request.setAttribute("langues", langue);
@@ -82,12 +93,14 @@ public class EditSubtitle extends HttpServlet {
 
         if(request.getParameter("Enregistrer") != null){
             System.out.println("***** LOG : Appui sur le bouton enregistrer");
+            TraductionDAO traductionDAO = new TraductionDAO();
             if (!sousTitres.isEmpty()){
                 for (int i = 1; i<sousTitres.size(); i++){
                     sousTitres.get(i).setLigne1_trad(request.getParameter("line"+i+1));
                     if(sousTitres.get(i).getLigne2_source() != null){
                         sousTitres.get(i).setLigne2_trad(request.getParameter("line"+i+1+"2"));
                     }
+                    traductionDAO.create(sousTitres.get(i));  //Ajoute ligne par ligne dans la base de données
                 }
 
             }
@@ -148,5 +161,6 @@ public class EditSubtitle extends HttpServlet {
             }
         }
     }
+
 
 }
