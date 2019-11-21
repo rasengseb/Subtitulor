@@ -53,7 +53,15 @@ public class EditSubtitle extends HttpServlet {
         request.setAttribute("langages", langages);
         //request.setAttribute("fichierCharger", fichierCharger);
 
-        if (request.getParameter("charger") != null) {
+        //-- OFA
+        boolean multipart = false;
+        System.out.println("CONTENT_TYPE :");
+        System.out.println(request.getContentType());
+        if (request.getContentType().substring(0, 19).equals("multipart/form-data")) {
+            multipart = true;
+        }
+
+        if (multipart) {
             System.out.println("***** LOG :  Appui sur le bouton fichier.");
             fichierCharger = true;
             request.setAttribute("fichierCharger", fichierCharger);
@@ -143,7 +151,7 @@ public class EditSubtitle extends HttpServlet {
         BufferedOutputStream sortie = null;
         try {
             entree = new BufferedInputStream(part.getInputStream(), TAILLE_TAMPON);
-            sortie = new BufferedOutputStream(new FileOutputStream(new File(chemin + nomFichier)), TAILLE_TAMPON);
+            sortie = new BufferedOutputStream(new FileOutputStream(new File(chemin + "/" + nomFichier)), TAILLE_TAMPON);
 
             byte[] tampon = new byte[TAILLE_TAMPON];
             int longueur;
