@@ -21,16 +21,17 @@ public class TraductionDAO extends DAO<Traduction> {
     public void create(Traduction obj) {
         PreparedStatement preparedStatement = null;
         try {
-            preparedStatement = this.getConnection().prepareStatement("INSERT INTO traduction(numeroTrad, temps, ligne1_source, ligne2_source, id_langue_source, ligne1_trad, ligne2_trad, id_langue_trad) VALUES(?,?,?,?,?,?,?,?)");
-            preparedStatement.setString(1, String.valueOf(obj.getNumeroTrad()));
-            preparedStatement.setString(2, obj.getTemps());
-            preparedStatement.setString(3, obj.getLigne1_source());
-            preparedStatement.setString(4, obj.getLigne2_source());
-            preparedStatement.setString(5, String.valueOf(obj.getId_langue_source()));
-            preparedStatement.setString(6, obj.getLigne1_trad());
-            preparedStatement.setString(7, obj.getLigne2_trad());
-            preparedStatement.setString(8, String.valueOf(obj.getId_langue_trad()));
-            preparedStatement.executeUpdate();
+            preparedStatement = this.getConnection().prepareStatement("INSERT INTO traduction(id_fichier,numeroTrad, temps, ligne1_source, ligne2_source, id_langue_source, ligne1_trad, ligne2_trad, id_langue_trad) VALUES(?,?,?,?,?,?,?,?,?)");
+            preparedStatement.setInt(1,obj.getId_fichier());
+            preparedStatement.setInt(2, obj.getNumeroTrad());
+            preparedStatement.setString(3, obj.getTemps());
+            preparedStatement.setString(4, obj.getLigne1_source());
+            preparedStatement.setString(5, obj.getLigne2_source());
+            preparedStatement.setInt(6, obj.getId_langue_source());
+            preparedStatement.setString(7, obj.getLigne1_trad());
+            preparedStatement.setString(8, obj.getLigne2_trad());
+            preparedStatement.setInt(9, obj.getId_langue_trad());
+            preparedStatement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
         }

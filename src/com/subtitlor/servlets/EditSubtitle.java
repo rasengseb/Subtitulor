@@ -1,7 +1,9 @@
 package com.subtitlor.servlets;
 
+import com.subtitlor.dao.FichierDAO;
 import com.subtitlor.dao.LanguageDAO;
 import com.subtitlor.dao.TraductionDAO;
+import com.subtitlor.utilities.Fichier;
 import com.subtitlor.utilities.Language;
 import com.subtitlor.utilities.SubtitlesHandler;
 import com.subtitlor.utilities.Traduction;
@@ -21,13 +23,14 @@ import javax.servlet.http.Part;
 @WebServlet("/EditSubtitle")
 public class EditSubtitle extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private static String FILE_NAME = "/ressources/";
+    private static String FILE_NAME = "D:/AppRessources/Subtitlor/";
     private static final String WEB_INF_EDIT_SUBTITLE_JSP = "/WEB-INF/edit_subtitle.jsp";
     private boolean fichierCharger = false;
     private static final int TAILLE_TAMPON = 10240;
-    public static final String CHEMIN_FICHIERS = "/ressources";
+    public static final String CHEMIN_FICHIERS = "D:/AppRessources/Subtitlor/";
     private ArrayList<Traduction> sousTitres;
-    ArrayList<Language> langages;
+    private ArrayList<Language> langages;
+    private String nomFichier;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         setCharacterEncoding(request, response);
@@ -51,7 +54,6 @@ public class EditSubtitle extends HttpServlet {
         LanguageDAO languagedao = new LanguageDAO();
         langages = languagedao.getAll();
         request.setAttribute("langages", langages);
-        //request.setAttribute("fichierCharger", fichierCharger);
 
         //-- OFA
         boolean multipart = false;
@@ -65,8 +67,9 @@ public class EditSubtitle extends HttpServlet {
             System.out.println("***** LOG :  Appui sur le bouton fichier.");
             fichierCharger = true;
             request.setAttribute("fichierCharger", fichierCharger);
+            fichierCharger = false;
             Part part = request.getPart("fichier");
-            String nomFichier = getNomFichier(part);
+            nomFichier = getNomFichier(part);
 
             if (nomFichier != null && !nomFichier.isEmpty()) {
                 String nomChamp = part.getName();
@@ -75,19 +78,22 @@ public class EditSubtitle extends HttpServlet {
                         .substring(nomFichier.lastIndexOf('\\') + 1);
 
                 // On écrit définitivement le fichier sur le disque
-                ecrireFichier(part, nomFichier, CHEMIN_FICHIERS);
+                ecrireFichier(part, nomFichier);
 
                 request.setAttribute(nomChamp, nomFichier);
             }
 
             FILE_NAME = FILE_NAME + nomFichier;
             System.out.println(FILE_NAME);
+            FichierDAO fichierDAO = new FichierDAO();
+            Fichier fichier = new Fichier(fichierDAO.getId(), nomFichier);
+            fichierDAO.create(fichier);
             String langue = request.getParameter("langues");
             request.setAttribute("fichier", nomFichier);
             request.setAttribute("langues", langue);
             request.setAttribute("file", FILE_NAME);
             ServletContext context = getServletContext();
-            SubtitlesHandler subtitles = new SubtitlesHandler(context.getRealPath(FILE_NAME));
+            SubtitlesHandler subtitles = new SubtitlesHandler(FILE_NAME);
             request.setAttribute("subtitles", subtitles.getLignes());
             sousTitres = subtitles.getLignes();
         }
@@ -99,14 +105,24 @@ public class EditSubtitle extends HttpServlet {
             fichierCharger = false;
         }
 
-        if(request.getParameter("Enregistrer") != null){
+        if(request.getParameter("enregistrer") != null){
             System.out.println("***** LOG : Appui sur le bouton enregistrer");
             TraductionDAO traductionDAO = new TraductionDAO();
+            FichierDAO fichierDAO = new FichierDAO();
+            int id_fichier = fichierDAO.find(nomFichier).getId();
             if (!sousTitres.isEmpty()){
                 for (int i = 1; i<sousTitres.size(); i++){
-                    sousTitres.get(i).setLigne1_trad(request.getParameter("line"+i+1));
+                    sousTitres.get(i).setId_fichier(id_fichier);
+                    if (request.getParameter("line"+i+1) != null){
+                        sousTitres.get(i).setLigne1_trad(request.getParameter("line"+i+1));
+                    } else{
+                        sousTitres.get(i).setLigne1_trad(" ");
+                    }
                     if(sousTitres.get(i).getLigne2_source() != null){
                         sousTitres.get(i).setLigne2_trad(request.getParameter("line"+i+1+"2"));
+                    } else{
+                        sousTitres.get(i).setLigne2_source(" ");
+                        sousTitres.get(i).setLigne2_trad(" ");
                     }
                     traductionDAO.create(sousTitres.get(i));  //Ajoute ligne par ligne dans la base de données
                 }
@@ -146,12 +162,12 @@ public class EditSubtitle extends HttpServlet {
     /**
      * Copie le fichier dans un dossier pour un stockage définitif.
      */
-    private void ecrireFichier(Part part, String nomFichier, String chemin) throws IOException {
+    private void ecrireFichier(Part part, String nomFichier) throws IOException {
         BufferedInputStream entree = null;
         BufferedOutputStream sortie = null;
         try {
             entree = new BufferedInputStream(part.getInputStream(), TAILLE_TAMPON);
-            sortie = new BufferedOutputStream(new FileOutputStream(new File(chemin + "/" + nomFichier)), TAILLE_TAMPON);
+            sortie = new BufferedOutputStream(new FileOutputStream(new File(EditSubtitle.CHEMIN_FICHIERS + "/" + nomFichier)), TAILLE_TAMPON);
 
             byte[] tampon = new byte[TAILLE_TAMPON];
             int longueur;

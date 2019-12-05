@@ -2,7 +2,6 @@ package com.subtitlor.dao;
 
 import com.subtitlor.utilities.Fichier;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,9 +15,11 @@ public class FichierDAO extends DAO<Fichier> {
     public void create(Fichier obj) {
         PreparedStatement preparedStatement = null;
         try {
-            preparedStatement = this.getConnection().prepareStatement("INSERT INTO fichier(nom) VALUES(?)");
-            preparedStatement.setString(1, obj.getNom());
-            preparedStatement.executeUpdate();
+            preparedStatement = this.getConnection().prepareStatement("INSERT INTO fichier(id, nom) VALUES(?, ?)");
+            preparedStatement.setInt(1, obj.getId());
+            preparedStatement.setString(2, obj.getNom());
+            preparedStatement.execute();
+            System.out.println("***** LOG : Insertion fichier bdd réussi.");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -34,6 +35,18 @@ public class FichierDAO extends DAO<Fichier> {
         return false;
     }
 
+    public Fichier find(String nom){
+        Fichier fichier = new Fichier(nom);
+        try{
+            ResultSet result = this.getConnection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM fichier WHERE nom =" + nom);
+            if(result.first()){
+                fichier = new Fichier(result.getInt("id"), nom);
+            }
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+        return fichier;
+    }
     @Override
     public Fichier find(int id) {
         Fichier fichier = new Fichier();
@@ -63,6 +76,29 @@ public class FichierDAO extends DAO<Fichier> {
             e.printStackTrace();
         }
         return fichiers;
+    }
+
+    public ArrayList<Fichier> getAll(){
+        ArrayList<Fichier> fichiers = new ArrayList<Fichier>();
+        try{
+            ResultSet resultSet = this.getConnection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM fichier");
+            while (resultSet.next()){
+                Fichier fichier = new Fichier(resultSet.getInt("id"), resultSet.getString("nom"));
+                fichiers.add(fichier);
+            }
+        } catch(SQLException e){
+            fichiers = null;
+        }
+        return fichiers;
+    }
+
+    public int getId(){
+        ArrayList<Fichier> fichiers = getAll();
+        if(fichiers == null){
+            return 0;
+        } else{
+            return fichiers.get(fichiers.size()-1).getId() +1;
+        }
     }
 
 }

@@ -2,6 +2,7 @@ package com.subtitlor.utilities;
 
 import java.io.*;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 public class SubtitlesHandler {
@@ -12,13 +13,13 @@ public class SubtitlesHandler {
      * @param fileName Chemin du fichier à lire.
      */
     public SubtitlesHandler(String fileName) {
-        Charset inputCharset = Charset.forName("UTF-8");
+        Charset inputCharset = StandardCharsets.UTF_8;
         BufferedReader br = null;
         lignes = new ArrayList<Traduction>();
         try {
             br = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), inputCharset));
             String line;
-            Boolean finDeFichier = false;
+            boolean finDeFichier = false;
             Traduction t = new Traduction();
             int count = 0;
             while ((line = br.readLine()) != null) {

@@ -27,8 +27,7 @@
                     <h2>Ouvrir un fichier</h2>
                 </div>
                 <div class="panel-body text-center">
-                    <form method="post" action="${pageContext.request.contextPath}/edit" id="soustitreForm1"
-                          enctype="multipart/form-data"> <!-- Formulaire upload fichier -->
+                    <form method="post" action="${pageContext.request.contextPath}/edit" id="soustitreForm1" enctype="multipart/form-data"> <!-- Formulaire upload fichier -->
                         <!--accept=".srt"-->
                         <div class="row">
                             <div class="nom col-lg-6 nom_video">
@@ -76,7 +75,7 @@
                     </div>
                     <div class="panel-body text-center">
                         <div class="Enregistrer">
-                            <input type="submit" class="btn btn-primary btn-sm" value="Enregistrer">
+                            <input type="submit" class="btn btn-primary btn-sm" value="Enregistrer" name="enregistrer">
                         </div>
                         <label>Choissez une vidéo</label>
                         <div>
@@ -138,12 +137,11 @@
                         </div>
 
                         <div class="col-lg-4">
-                            <input class="form-control" type="text" name="line${ status.index }2"
-                                   id="line${ status.index }">
+                            <input class="form-control" type="text" name="line${ status.index }2" id="line${ status.index }2">
                         </div>
                     </div>
+                    </c:if>
                 </div>
-                </c:if>
             </div>
         </c:forEach>
     </c:if>

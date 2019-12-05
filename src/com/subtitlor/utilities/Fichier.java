@@ -4,6 +4,10 @@ public class Fichier {
     private int id;
     private String nom;
 
+    public Fichier(String nom){
+        this.nom = nom;
+    }
+
     public Fichier(){
 
     }
