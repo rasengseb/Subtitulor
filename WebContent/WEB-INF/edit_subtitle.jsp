@@ -80,7 +80,10 @@
                         <label>Choissez une vidéo</label>
                         <div>
                             <select name="fichiers" id="fichiers" class="fichiers">
-                                <option value="">En cours</option>
+                                <option value="vide" ></option>
+                                <c:forEach items="${ fichiers }" var="fichier" varStatus="status">
+                                    <option value="${ fichier.getNom() }"> ${ fichier.getNom() }</option>
+                                </c:forEach>
                             </select>
                         </div>
                         <div class="boutons">
@@ -106,13 +109,14 @@
     </div>
 
     <!-- Bandeau récapitulatif -->
-    <c:if test="${ fichierCharger }">
+<%--    <c:if test="${ fichierCharger }">--%>
         <div class="row">
             <p>Vidéo : ${ fichier } Langue : ${ langue } Fichier : ${ file } </p>
+            <h3 class="messageErreur"><c:out value="${messageErreur}" /></h3>
         </div>
         <!-- tableau fichier à traduire -->
         <c:forEach items="${ subtitles }" var="t" varStatus="status">
-            <div class="row">
+            <div class="row interligne">
                 <div class="col-lg-1">
                     <c:out value="${ status.index }">${ status.index }</c:out>
                 </div>
@@ -131,7 +135,7 @@
                     </div>
 
                     <c:if test="${ t.getLigne2_source() != null }">
-                    <div class="row">
+<%--                    <div class="row">--%>
                         <div class="col-lg-offset-4 col-lg-4">
                             <c:out value="${ t.getLigne2_source() }">${ t.getLigne2_source() }</c:out>
                         </div>
@@ -139,12 +143,12 @@
                         <div class="col-lg-4">
                             <input class="form-control" type="text" name="line${ status.index }2" id="line${ status.index }2">
                         </div>
-                    </div>
+<%--                    </div>--%>
                     </c:if>
                 </div>
             </div>
         </c:forEach>
-    </c:if>
+<%--    </c:if>--%>
 
     </form>
 

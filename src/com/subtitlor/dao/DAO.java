@@ -22,6 +22,8 @@ public abstract class DAO<T> {
 
     public abstract ArrayList<T> findAll(int id);
 
+    public abstract ArrayList<T> findAll();
+
     public Connection getConnection(){
         return connection;
     }

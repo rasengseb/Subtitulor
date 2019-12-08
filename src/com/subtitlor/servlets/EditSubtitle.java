@@ -3,132 +3,149 @@ package com.subtitlor.servlets;
 import com.subtitlor.dao.FichierDAO;
 import com.subtitlor.dao.LanguageDAO;
 import com.subtitlor.dao.TraductionDAO;
-import com.subtitlor.utilities.Fichier;
-import com.subtitlor.utilities.Language;
+import com.subtitlor.model.Fichier;
+import com.subtitlor.model.Language;
+import com.subtitlor.model.Traduction;
 import com.subtitlor.utilities.SubtitlesHandler;
-import com.subtitlor.utilities.Traduction;
 
-import java.io.*;
-import java.util.ArrayList;
-
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
+import java.io.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-
+/**
+ * A RENSEIGNER...
+ */
 @WebServlet("/EditSubtitle")
 public class EditSubtitle extends HttpServlet {
+
+    public static final String VIDEO_NAME_ALREADY_EXISTS_IN_DATABASE = "Attention : le nom de la vidéo existe déjà en base de données !";
+    public static final String ALL_FIELDS_ARE_MANDATORY = "Attention : Pour ouvrir un fichier, tous les champs sont obligatoires !";
+
     private static final long serialVersionUID = 1L;
-    private static String FILE_NAME = "D:/AppRessources/Subtitlor/";
+    private static final String FILE_NAME = "D:/AppRessources/Subtitlor/";
     private static final String WEB_INF_EDIT_SUBTITLE_JSP = "/WEB-INF/edit_subtitle.jsp";
-    private boolean fichierCharger = false;
     private static final int TAILLE_TAMPON = 10240;
     public static final String CHEMIN_FICHIERS = "D:/AppRessources/Subtitlor/";
-    private ArrayList<Traduction> sousTitres;
-    private ArrayList<Language> langages;
+    private List<Traduction> sousTitres;
+    private List<Language> langages;
     private String nomFichier;
+    private String langueSource;
+    private String messageErreur = "";
 
+    /**
+     * A RENSEIGNER...
+     *
+     * @param request  A RENSEIGNER...
+     * @param response A RENSEIGNER...
+     * @throws ServletException A RENSEIGNER...
+     * @throws IOException      A RENSEIGNER...
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         setCharacterEncoding(request, response);
-        request.setAttribute("fichierCharger", fichierCharger);
 
-       // ServletContext context = getServletContext();
-       // System.out.println(context.getRealPath(FILE_NAME));
-        //SubtitlesHandler subtitles = new SubtitlesHandler(context.getRealPath(FILE_NAME));
-        //request.setAttribute("subtitles", subtitles.getLignes());
         LanguageDAO languagedao = new LanguageDAO();
-        langages = languagedao.getAll();
+        langages = languagedao.findAll();
         request.setAttribute("langages", langages);
 
         this.getServletContext().getRequestDispatcher(WEB_INF_EDIT_SUBTITLE_JSP).forward(request, response);
     }
 
 
+    /**
+     * A RENSEIGNER...
+     *
+     * @param request  A RENSEIGNER...
+     * @param response A RENSEIGNER...
+     * @throws ServletException A RENSEIGNER...
+     * @throws IOException      A RENSEIGNER...
+     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("entrer dans doPost");
         setCharacterEncoding(request, response);
         LanguageDAO languagedao = new LanguageDAO();
-        langages = languagedao.getAll();
+        langages = languagedao.findAll();
         request.setAttribute("langages", langages);
 
         //-- OFA
         boolean multipart = false;
-        System.out.println("CONTENT_TYPE :");
-        System.out.println(request.getContentType());
         if (request.getContentType().substring(0, 19).equals("multipart/form-data")) {
             multipart = true;
         }
 
         if (multipart) {
-            System.out.println("***** LOG :  Appui sur le bouton fichier.");
-            fichierCharger = true;
-            request.setAttribute("fichierCharger", fichierCharger);
-            fichierCharger = false;
             Part part = request.getPart("fichier");
             nomFichier = getNomFichier(part);
 
-            if (nomFichier != null && !nomFichier.isEmpty()) {
+            if (nomFichier != null && !nomFichier.isEmpty() && !isDoublonTitreVideo(nomFichier)) {
+
+                langueSource = request.getParameter("langues"); // Récupérer la langue source : C'est le seul moment où l'on peut car ce n'est pas le même formulaire et on en a besoin pour enregistrer en base.
                 String nomChamp = part.getName();
                 // Corrige un bug du fonctionnement d'Internet Explorer
-                nomFichier = nomFichier.substring(nomFichier.lastIndexOf('/') + 1)
-                        .substring(nomFichier.lastIndexOf('\\') + 1);
+                nomFichier = nomFichier.substring(nomFichier.lastIndexOf('/') + 1).substring(nomFichier.lastIndexOf('\\') + 1);
 
                 // On écrit définitivement le fichier sur le disque
                 ecrireFichier(part, nomFichier);
 
                 request.setAttribute(nomChamp, nomFichier);
+
+                FichierDAO fichierDAO = new FichierDAO();
+                Fichier fichier = new Fichier(nomFichier);
+                fichierDAO.create(fichier);
+
+                SubtitlesHandler subtitles = new SubtitlesHandler(FILE_NAME + "/" + nomFichier);
+                sousTitres = subtitles.getLignes();
+            }
+            else {
+                if (isDoublonTitreVideo(nomFichier)) {
+                    messageErreur = VIDEO_NAME_ALREADY_EXISTS_IN_DATABASE;
+                } else {
+                    messageErreur = ALL_FIELDS_ARE_MANDATORY;
+                }
+                request.setAttribute("messageErreur", messageErreur);
             }
 
-            FILE_NAME = FILE_NAME + nomFichier;
-            System.out.println(FILE_NAME);
-            FichierDAO fichierDAO = new FichierDAO();
-            Fichier fichier = new Fichier(fichierDAO.getId(), nomFichier);
-            fichierDAO.create(fichier);
-            String langue = request.getParameter("langues");
             request.setAttribute("fichier", nomFichier);
-            request.setAttribute("langues", langue);
+            request.setAttribute("langues", langueSource);
             request.setAttribute("file", FILE_NAME);
-            ServletContext context = getServletContext();
-            SubtitlesHandler subtitles = new SubtitlesHandler(FILE_NAME);
-            request.setAttribute("subtitles", subtitles.getLignes());
-            sousTitres = subtitles.getLignes();
+            request.setAttribute("subtitles", sousTitres);
         }
 
         if (request.getParameter("lire") != null) {
-            System.out.println("***** LOG :  Appui sur le bouton lire.");
-            fichierCharger = true;
-            request.setAttribute("fichierCharger", fichierCharger);
-            fichierCharger = false;
         }
 
-        if(request.getParameter("enregistrer") != null){
-            System.out.println("***** LOG : Appui sur le bouton enregistrer");
+        if (request.getParameter("enregistrer") != null) {
+
+            //-- On fixe les langues (Cible = "English" par défaut)
+            Map<String, Language> listeLangues = transformListLangueToMap(langages); //-- La liste de langues sous forme de Map pour retrouver plus facilement grâce au nom ou à l'id
+            int langueSource = listeLangues.get(this.langueSource).getId();
+            int langueCible = listeLangues.get("English").getId();
+
             TraductionDAO traductionDAO = new TraductionDAO();
             FichierDAO fichierDAO = new FichierDAO();
             int id_fichier = fichierDAO.find(nomFichier).getId();
-            if (!sousTitres.isEmpty()){
-                for (int i = 1; i<sousTitres.size(); i++){
-                    sousTitres.get(i).setId_fichier(id_fichier);
-                    if (request.getParameter("line"+i+1) != null){
-                        sousTitres.get(i).setLigne1_trad(request.getParameter("line"+i+1));
-                    } else{
-                        sousTitres.get(i).setLigne1_trad(" ");
-                    }
-                    if(sousTitres.get(i).getLigne2_source() != null){
-                        sousTitres.get(i).setLigne2_trad(request.getParameter("line"+i+1+"2"));
-                    } else{
-                        sousTitres.get(i).setLigne2_source(" ");
-                        sousTitres.get(i).setLigne2_trad(" ");
-                    }
-                    traductionDAO.create(sousTitres.get(i));  //Ajoute ligne par ligne dans la base de données
+            if (!sousTitres.isEmpty()) {
+                for (int i = 0; i < sousTitres.size(); i++) {
+                    Traduction sousTitre = sousTitres.get(i);
+                    sousTitre.setId_fichier(id_fichier);
+                    sousTitre.setId_langue_source(langueSource);
+                    sousTitre.setId_langue_trad(langueCible);
+                    traductionDAO.create(sousTitre);
                 }
 
             }
+
+            request.setAttribute("langues", langages);
+            List<Fichier> fichierBdd = new FichierDAO().findAll();
+            request.setAttribute("fichiers", fichierBdd);
+            request.setAttribute("subtitles", sousTitres);
         }
+
         this.getServletContext().getRequestDispatcher(WEB_INF_EDIT_SUBTITLE_JSP).forward(request, response);
     }
 
@@ -161,8 +178,20 @@ public class EditSubtitle extends HttpServlet {
 
     /**
      * Copie le fichier dans un dossier pour un stockage définitif.
+     *
+     * @param part       A RENSEIGNER...
+     * @param nomFichier A RENSEIGNER...
+     * @throws IOException A RENSEIGNER...
      */
     private void ecrireFichier(Part part, String nomFichier) throws IOException {
+
+        //-- OFA : Contrôler l'existence du répertoire cible.
+        File file = new File(EditSubtitle.CHEMIN_FICHIERS);
+        if (!file.exists()) {
+            //-- Générer une exception si le répertoire n'existe pas !
+            throw new IOException("Attention, le répertoire " + EditSubtitle.CHEMIN_FICHIERS + " n'existent pas !!!");
+        }
+
         BufferedInputStream entree = null;
         BufferedOutputStream sortie = null;
         try {
@@ -174,6 +203,8 @@ public class EditSubtitle extends HttpServlet {
             while ((longueur = entree.read(tampon)) > 0) {
                 sortie.write(tampon, 0, longueur);
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             try {
                 sortie.close();
@@ -186,5 +217,31 @@ public class EditSubtitle extends HttpServlet {
         }
     }
 
+    /**
+     * Teansforme une List de Langues en Map de Langues afin de faciliter la recherche d'une langue pas son nom.
+     * @param listeLangues
+     * @return
+     */
+    public HashMap<String, Language> transformListLangueToMap(List<Language> listeLangues) {
+        HashMap<String, Language> productMap = new HashMap<>();
+        for (Language language : listeLangues) {
+            productMap.put(language.getLangue(), language);
+            System.out.println(language.toString());
+        }
+        return productMap;
+    }
 
+    /**
+     * Vérifier que le nom de la vidéo choisi lors de l'upload n'a pas déjàété choisi auparavant.
+     * @return true si le nom de la vidéo est déjà utilisé.
+     */
+    private boolean isDoublonTitreVideo(String nomDuFichier) {
+        boolean doublonTitreVideo = false;
+        List<Fichier> listeFichiers = new FichierDAO().findAll();
+        for (Fichier fichier : listeFichiers) {
+            if ( nomDuFichier.equals(fichier.getNom()) )
+                doublonTitreVideo = true;
+        }
+        return doublonTitreVideo;
+    }
 }

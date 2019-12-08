@@ -1,8 +1,7 @@
 package com.subtitlor.dao;
 
-import com.subtitlor.utilities.Language;
+import com.subtitlor.model.Language;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,7 +15,7 @@ public class LanguageDAO extends DAO<Language> {
     public void create(Language obj) {
         PreparedStatement preparedStatement = null;
         try {
-            preparedStatement = this.getConnection().prepareStatement("INSERT INTO langues(langue) VALUES(?)");
+            preparedStatement = this.getConnection().prepareStatement("INSERT INTO language(langue) VALUES(?)");
             preparedStatement.setString(1, obj.getLangue());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -50,23 +49,12 @@ public class LanguageDAO extends DAO<Language> {
 
     @Override
     public ArrayList<Language> findAll(int id) {
-        ArrayList<Language> languages = new ArrayList<Language>();
-        try{
-            ResultSet result = this.getConnection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM language WHERE id = " + id);
-            while(result.next()){
-                Language language = new Language();
-                language.setLangue(result.getString("langue"));
-                language.setId(Integer.parseInt(result.getString("id")));
-                languages.add(language);
-            }
-        } catch (SQLException e){
-            e.printStackTrace();
-        }
-        return languages;
+        return null;
     }
 
-    public ArrayList<Language> getAll(){
-        ArrayList<Language> languages = new ArrayList<Language>();
+    @Override
+    public ArrayList<Language> findAll() {
+        ArrayList<Language> languages = new ArrayList<>();
         try{
             ResultSet result = this.getConnection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM language");
             while(result.next()){

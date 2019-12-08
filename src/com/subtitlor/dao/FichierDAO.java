@@ -1,6 +1,6 @@
 package com.subtitlor.dao;
 
-import com.subtitlor.utilities.Fichier;
+import com.subtitlor.model.Fichier;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,11 +13,15 @@ public class FichierDAO extends DAO<Fichier> {
 
     @Override
     public void create(Fichier obj) {
-        PreparedStatement preparedStatement = null;
+        PreparedStatement preparedStatement;
         try {
-            preparedStatement = this.getConnection().prepareStatement("INSERT INTO fichier(id, nom) VALUES(?, ?)");
-            preparedStatement.setInt(1, obj.getId());
-            preparedStatement.setString(2, obj.getNom());
+//            preparedStatement = this.getConnection().prepareStatement("INSERT INTO fichier(id, nom) VALUES(?, ?)");
+//            preparedStatement.setInt(1, obj.getId());
+//            preparedStatement.setString(2, obj.getNom());
+            //-- OFA
+            preparedStatement = this.getConnection().prepareStatement("INSERT INTO fichier(nom) VALUES(?)");
+            preparedStatement.setString(1, obj.getNom());
+
             preparedStatement.execute();
             System.out.println("***** LOG : Insertion fichier bdd réussi.");
         } catch (SQLException e) {
@@ -38,7 +42,7 @@ public class FichierDAO extends DAO<Fichier> {
     public Fichier find(String nom){
         Fichier fichier = new Fichier(nom);
         try{
-            ResultSet result = this.getConnection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM fichier WHERE nom =" + nom);
+            ResultSet result = this.getConnection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM fichier WHERE nom ='" + nom + "'");
             if(result.first()){
                 fichier = new Fichier(result.getInt("id"), nom);
             }
@@ -63,9 +67,14 @@ public class FichierDAO extends DAO<Fichier> {
 
     @Override
     public ArrayList<Fichier> findAll(int id) {
-        ArrayList<Fichier> fichiers = new ArrayList<Fichier>();
+        return null;
+    }
+
+    @Override
+    public ArrayList<Fichier> findAll() {
+        ArrayList<Fichier> fichiers = new ArrayList<>();
         try{
-            ResultSet result = this.getConnection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM fichier WHERE id = " + id);
+            ResultSet result = this.getConnection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM fichier");
             while(result.next()){
                 Fichier fichier = new Fichier();
                 fichier.setNom(result.getString("nom"));
@@ -79,7 +88,7 @@ public class FichierDAO extends DAO<Fichier> {
     }
 
     public ArrayList<Fichier> getAll(){
-        ArrayList<Fichier> fichiers = new ArrayList<Fichier>();
+        ArrayList<Fichier> fichiers = new ArrayList<>();
         try{
             ResultSet resultSet = this.getConnection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM fichier");
             while (resultSet.next()){
