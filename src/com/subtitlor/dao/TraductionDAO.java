@@ -1,36 +1,40 @@
 package com.subtitlor.dao;
 
-import com.subtitlor.utilities.Traduction;
+import com.subtitlor.model.Traduction;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+/**
+ * A RENSEIGNER...
+ */
 public class TraductionDAO extends DAO<Traduction> {
+    /***
+     * PAS BESOIN : LE CONSTRUCTEUR PAR DEFAUT EST IMPLICITE. SI ON NE FAIT RIEN DEDANS : PAS BESOIN DE LE DECLARER.
+     */
     public TraductionDAO() {
-
     }
 
     /**
      * Ajoute un objet Traduction dans la table Traduction de la BDD.
-     * @param obj Traduction à ajouter.
+     * @param traduction Traduction à ajouter.
      */
     @Override
-    public void create(Traduction obj) {
+    public void create(Traduction traduction) {
         PreparedStatement preparedStatement = null;
         try {
-            preparedStatement = this.getConnection().prepareStatement("INSERT INTO traduction(id_fichier,numeroTrad, temps, ligne1_source, ligne2_source, id_langue_source, ligne1_trad, ligne2_trad, id_langue_trad) VALUES(?,?,?,?,?,?,?,?,?)");
-            preparedStatement.setInt(1,obj.getId_fichier());
-            preparedStatement.setInt(2, obj.getNumeroTrad());
-            preparedStatement.setString(3, obj.getTemps());
-            preparedStatement.setString(4, obj.getLigne1_source());
-            preparedStatement.setString(5, obj.getLigne2_source());
-            preparedStatement.setInt(6, obj.getId_langue_source());
-            preparedStatement.setString(7, obj.getLigne1_trad());
-            preparedStatement.setString(8, obj.getLigne2_trad());
-            preparedStatement.setInt(9, obj.getId_langue_trad());
+            preparedStatement = this.getConnection().prepareStatement("INSERT INTO traduction(id_fichier, numeroTrad, temps, id_langue_source, ligne1_source, ligne2_source, id_langue_trad, ligne1_trad, ligne2_trad) VALUES(?,?,?,?,?,?,?,?,?)");
+            preparedStatement.setInt(1,traduction.getId_fichier());
+            preparedStatement.setInt(2, traduction.getNumeroTrad());
+            preparedStatement.setString(3, traduction.getTemps());
+            preparedStatement.setInt(4, traduction.getId_langue_source());
+            preparedStatement.setString(5, traduction.getLigne1_source());
+            preparedStatement.setString(6, traduction.getLigne2_source());
+            preparedStatement.setInt(7, traduction.getId_langue_trad());
+            preparedStatement.setString(8, traduction.getLigne1_trad());
+            preparedStatement.setString(9, traduction.getLigne2_trad());
             preparedStatement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -56,7 +60,7 @@ public class TraductionDAO extends DAO<Traduction> {
     public Traduction find(int id) {
         Traduction t = new Traduction();
         try {
-            ResultSet result = this.getConnection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM fichier WHERE id = " + id);
+            ResultSet result = this.getConnection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM traduction WHERE id_fichier = " + id);
             if (result.first()) {
                 t = new Traduction(id, result.getInt("numeroTrad"), result.getString("temps"), result.getInt("id_langue_source"), result.getString("ligne1_source"), result.getString("ligne2_source"), result.getString("ligne1_trad"), result.getString("ligne2_trad"), result.getInt("id_langue_trad"));
             }
@@ -73,9 +77,9 @@ public class TraductionDAO extends DAO<Traduction> {
      */
     @Override
     public ArrayList<Traduction> findAll(int id) {
-        ArrayList<Traduction> traductions = new ArrayList<Traduction>();
+        ArrayList<Traduction> traductions = new ArrayList<>();
         try{
-            ResultSet result = this.getConnection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Traduction WHERE id = " + id);
+            ResultSet result = this.getConnection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Traduction WHERE id_fichier = " + id);
             while(result.next()){
                 Traduction traduction = new Traduction();
                 traduction.setId_fichier(Integer.parseInt(result.getString("id")));
@@ -93,5 +97,10 @@ public class TraductionDAO extends DAO<Traduction> {
             e.printStackTrace();
         }
         return traductions;
+    }
+
+    @Override
+    public ArrayList<Traduction> findAll() {
+        return null;
     }
 }

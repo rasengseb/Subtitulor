@@ -1,4 +1,4 @@
-package com.subtitlor.utilities;
+package com.subtitlor.model;
 
 
 public class Traduction {

@@ -1,4 +1,4 @@
-package com.subtitlor.utilities;
+package com.subtitlor.model;
 
 public class Language {
     private int id;
@@ -27,5 +27,13 @@ public class Language {
 
     public void setLangue(String langue) {
         this.langue = langue;
+    }
+
+    @Override
+    public String toString() {
+        return "Language{" +
+                "id=" + id +
+                ", langue='" + langue + '\'' +
+                '}';
     }
 }

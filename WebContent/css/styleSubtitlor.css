@@ -23,5 +23,15 @@
 }
 
 .form-group{
-    border : 1px solid;
+    /*border : 1px solid;*/
+}
+
+.messageErreur {
+    color: #F00;
+    text-align: center;
+    padding: 10px 0 10px 0;
+}
+
+.interligne {
+    margin-bottom: 10px;
 }
